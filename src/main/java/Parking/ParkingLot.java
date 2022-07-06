@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class ParkingLot implements ParkingLotFacade{
     private ParkingLevelsCollection fullLevels;
@@ -110,12 +112,11 @@ public class ParkingLot implements ParkingLotFacade{
             throw new InvalidParkingTicketException("an invalid parking " +
                     "ticket was passed");
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
         long minutes = ChronoUnit.MINUTES.between(parkingTicket.getParkingTime(),
                 unParkingTime);
         int hours = (int)Math.ceil((double) minutes/60);
         System.out.println("Hours : " + hours);
-        double paymentSum = PaymentCalculation.getAmount(feeModelList, hours, vehicle.getVehicleType());
+        double paymentSum = PaymentCalculation.getAmount(feeModelList, parkingTicket, unParkingTime, vehicle.getVehicleType());
         return generatePaymentTicket(parkingTicket, paymentSum, unParkingTime);
     }
 

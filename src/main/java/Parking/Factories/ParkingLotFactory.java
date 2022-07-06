@@ -1,5 +1,7 @@
 package Parking.Factories;
 
+import Exceptions.InvalidParkingLevelException;
+import Exceptions.InvalidParkingTicketException;
 import Parking.ParkingLevelsCollection;
 import Parking.ParkingLot;
 import Parking.ParkingSpotType;
@@ -14,7 +16,10 @@ import java.util.Map;
 
 public class ParkingLotFactory {
 
-    public ParkingLot createNewParkingLot(int numOfLevels, int parkingSpotTypes, Map<ParkingSpotType, Integer> noOfSpotsPerSpotType, List<FeeModel> feeModelList) {
+    public ParkingLot createNewParkingLot(int numOfLevels, int parkingSpotTypes, Map<ParkingSpotType, Integer> noOfSpotsPerSpotType, List<FeeModel> feeModelList) throws InvalidParkingLevelException {
+        if (numOfLevels <= 0) {
+            throw new InvalidParkingLevelException("an invalid parking level");
+        }
         ParkingLevelsCollectionFactory parkingLevelsCollectionFactory = new ParkingLevelsCollectionFactory(numOfLevels, parkingSpotTypes, noOfSpotsPerSpotType);
         ParkingLevelsCollection parkingLevels = parkingLevelsCollectionFactory.createParkingLevelsCollection();
         LevelAssignmentPolicy levelAssignmentPolicy = new BasicLevelAssignmentPolicy();
