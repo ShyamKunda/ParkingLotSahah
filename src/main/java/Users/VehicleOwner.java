@@ -88,7 +88,7 @@ public class VehicleOwner {
     private void handleFullParkingLotException(ParkingLotIsFullException parkingLotIsFullException) {
         parkingLotIsFullException.printStackTrace();
         try {
-            TimeUnit.MINUTES.sleep(1);
+            TimeUnit.SECONDS.sleep(3);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

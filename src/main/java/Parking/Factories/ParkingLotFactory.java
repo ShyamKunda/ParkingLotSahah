@@ -16,11 +16,11 @@ import java.util.Map;
 
 public class ParkingLotFactory {
 
-    public ParkingLot createNewParkingLot(int numOfLevels, int parkingSpotTypes, Map<ParkingSpotType, Integer> noOfSpotsPerSpotType, List<FeeModel> feeModelList) throws InvalidParkingLevelException {
+    public ParkingLot createNewParkingLot(int numOfLevels, int parkingSpotTypesCount, Map<ParkingSpotType, Integer> noOfSpotsPerSpotType, List<FeeModel> feeModelList) throws InvalidParkingLevelException {
         if (numOfLevels <= 0) {
             throw new InvalidParkingLevelException("an invalid parking level");
         }
-        ParkingLevelsCollectionFactory parkingLevelsCollectionFactory = new ParkingLevelsCollectionFactory(numOfLevels, parkingSpotTypes, noOfSpotsPerSpotType);
+        ParkingLevelsCollectionFactory parkingLevelsCollectionFactory = new ParkingLevelsCollectionFactory(numOfLevels, parkingSpotTypesCount, noOfSpotsPerSpotType);
         ParkingLevelsCollection parkingLevels = parkingLevelsCollectionFactory.createParkingLevelsCollection();
         LevelAssignmentPolicy levelAssignmentPolicy = new BasicLevelAssignmentPolicy();
         ParkingAssignmentPolicy parkingAssignmentPolicy =
