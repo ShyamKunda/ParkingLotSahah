@@ -116,6 +116,7 @@ public class VehicleOwner {
     public PaymentTicket unparkVehicleAndGetAmount(ParkingLotFacade parkingLot, LocalDateTime unParkTime) {
         try {
             this.paymentTicket =this.pay(parkingLot, unParkTime, this.vehicle);
+            System.out.println(this.paymentTicket);
             parkingLot.unparkVehicleAndGetAmount(this.vehicle, this.paymentTicket);
         }
         catch (InvalidPaymentTicketException e) {

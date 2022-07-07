@@ -116,8 +116,7 @@ public class ParkingLot implements ParkingLotFacade {
         }
         long minutes = ChronoUnit.MINUTES.between(parkingTicket.getParkingTime(),
                 unParkingTime);
-        int hours = (int)Math.ceil((double) minutes/60);
-        System.out.println("Hours : " + hours);
+        int hours = (int)Math.floor((double) minutes/60);
         double paymentSum = PaymentCalculation.getAmount(feeModelList, parkingTicket, unParkingTime, vehicle.getVehicleType());
         return generatePaymentTicket(parkingTicket, paymentSum, unParkingTime);
     }

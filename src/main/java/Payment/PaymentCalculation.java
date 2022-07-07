@@ -23,12 +23,21 @@ public class PaymentCalculation {
         specificVehicleFeeModelList.forEach(feeModel -> specificVehicleFeeModelTreeMap.put(feeModel.getStart(), feeModel));
         long minutes = ChronoUnit.MINUTES.between(parkingTicket.getParkingTime(),
                 unparkTime);
-        int hours = (int)Math.ceil((double) minutes/60);
-        FeeModel finalFeeModel = hours == 0? specificVehicleFeeModelTreeMap.firstEntry().getValue():
-                specificVehicleFeeModelTreeMap.floorEntry((int)hours).getValue();
+        int hours = (int)Math.floor((double) minutes/60.0);
+        double hoursDouble = (double) minutes/60.0;
+        int hourCeiling = (int)Math.ceil(hoursDouble);
+        int hourFloor = (int)Math.floor(hoursDouble);
+        int lastFeeKey = specificVehicleFeeModelTreeMap.lastEntry().getValue().getStart(); //12
+        FeeModel finalFeeModel ;
+        if (hoursDouble >= (double) lastFeeKey ) {
+            finalFeeModel = specificVehicleFeeModelTreeMap.floorEntry(hourCeiling).getValue();
+        } else {
+            finalFeeModel = specificVehicleFeeModelTreeMap.floorEntry(hourFloor).getValue();
+        }
+
+
+
         int intervalStart = finalFeeModel.getStart();
-//        System.out.println("Total Hours: " + hours);
-//        System.out.println("Interval start: " + finalFeeModel.getStart() + " Price: " + finalFeeModel.getPrice());
         long totalCost = 0;
 
         FeeModel lastFeeModel = specificVehicleFeeModelTreeMap.lastEntry().getValue();
@@ -36,7 +45,7 @@ public class PaymentCalculation {
         if (lastFeeModel.isIgnorePreviousCriteria()) {
             if (finalFeeModel.getStart() == specificVehicleFeeModelTreeMap.lastKey()) {
                 if (finalFeeModel.getPaymentCriteria() == PaymentCriteria.DAYS) {
-                    int days = hours/24;
+                    int days =  (int) Math.ceil(hours/24.0);
                     int costForOneDay = finalFeeModel.getPrice();
                     totalCost = costForOneDay*days;
                 } else {
@@ -48,7 +57,6 @@ public class PaymentCalculation {
             }
         } else {
             if (finalFeeModel.getStart() == specificVehicleFeeModelTreeMap.lastKey()) {
-//            System.out.println("This is last key");
                 for (FeeModel feeModel : specificVehicleFeeModelList) {
                     totalCost+= feeModel.getPrice();
                     if (feeModel.getStart() == intervalStart) {
@@ -56,22 +64,17 @@ public class PaymentCalculation {
                     }
                 }
                 totalCost = totalCost - specificVehicleFeeModelTreeMap.lastEntry().getValue().getPrice();
-//            System.out.println("Previous cost computations done " + totalCost );
-                long remainingHours = hours - specificVehicleFeeModelTreeMap.lastKey();
-//            System.out.println("Remaining hours: " +  remainingHours);
+                long remainingHours = hourCeiling - specificVehicleFeeModelTreeMap.lastKey();
                 long costForRemainingHours = remainingHours* specificVehicleFeeModelTreeMap.lastEntry().getValue().getPrice();
                 totalCost = totalCost + costForRemainingHours;
                 System.out.println(totalCost);
-//            System.out.println("Total cost " + totalCost);
             } else {
-//            System.out.println("This is not last key");
                 for (FeeModel feeModel : specificVehicleFeeModelList) {
                     totalCost+= feeModel.getPrice();
                     if (feeModel.getStart() == intervalStart) {
                         break;
                     }
                 }
-                System.out.println("Total cost " + totalCost);
             }
         }
 

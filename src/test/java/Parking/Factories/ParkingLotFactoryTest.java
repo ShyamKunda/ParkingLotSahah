@@ -22,10 +22,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ParkingLotFactoryTest {
 
-    ParkingLotFactory parkingLotFactory;
-    Map<ParkingSpotType, Integer> spotAllocations;
-    List<FeeModel> feeModelList = new ArrayList<>();
-    DateTimeFormatter formatter;
+    private ParkingLotFactory parkingLotFactory;
+    private  Map<ParkingSpotType, Integer> spotAllocations;
+    private List<FeeModel> feeModelList = new ArrayList<>();
+    private DateTimeFormatter formatter;
 
 
     @BeforeEach
@@ -229,7 +229,7 @@ public class ParkingLotFactoryTest {
         vehicleOwner.parkVehicle(parkingLot);
         assertThat(parkingLot.getAllLevels().getParkingLevel(0).getTotalNumOfVacantSpots()).isEqualTo(1);
         assertThat(parkingLot.getAllLevels().getParkingLevel(0).getNumOfVacantSpotsOfType(ParkingSpotType.MOTORCYCLE)).isEqualTo(0);
-        vehicleOwner.unparkVehicleAndGetAmount(parkingLot);
+        vehicleOwner.unparkVehicleAndGetAmount(parkingLot, LocalDateTime.now().plusDays(10).plusHours(4));
         assertThat(parkingLot.getAllLevels().getParkingLevel(0).getTotalNumOfVacantSpots()).isEqualTo(2);
         assertThat(parkingLot.getAllLevels().getParkingLevel(0).getNumOfVacantSpotsOfType(ParkingSpotType.MOTORCYCLE)).isEqualTo(1);
     }
