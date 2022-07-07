@@ -1,5 +1,6 @@
 package Payment;
 
+import Exceptions.InputNotProvidedException;
 import Vehicles.VehicleType;
 
 import java.time.LocalDateTime;
@@ -10,16 +11,21 @@ import java.util.stream.Collectors;
 
 public class PaymentCalculation {
 
-    public static long getAmount(List<FeeModel> feeModelList, ParkingTicket parkingTicket, LocalDateTime unparkTime, VehicleType vehicleType) {
+    public static long getAmount(List<FeeModel> feeModelList, ParkingTicket parkingTicket, LocalDateTime unparkTime, VehicleType vehicleType) throws InputNotProvidedException {
 
         TreeMap<Integer, FeeModel> specificVehicleFeeModelTreeMap = new TreeMap<>();
         List<FeeModel> specificVehicleFeeModelList = feeModelList.stream().filter(feeModel -> feeModel.getVehicleType() == vehicleType).collect(Collectors.toList());
+
+        if (specificVehicleFeeModelList.size() == 0) {
+            throw new InputNotProvidedException("Fee Model is Not provided for Type : " + vehicleType);
+        }
 
         specificVehicleFeeModelList.forEach(feeModel -> specificVehicleFeeModelTreeMap.put(feeModel.getStart(), feeModel));
         long minutes = ChronoUnit.MINUTES.between(parkingTicket.getParkingTime(),
                 unparkTime);
         int hours = (int)Math.ceil((double) minutes/60);
-        FeeModel finalFeeModel = specificVehicleFeeModelTreeMap.floorEntry((int)hours).getValue();
+        FeeModel finalFeeModel = hours == 0? specificVehicleFeeModelTreeMap.firstEntry().getValue():
+                specificVehicleFeeModelTreeMap.floorEntry((int)hours).getValue();
         int intervalStart = finalFeeModel.getStart();
 //        System.out.println("Total Hours: " + hours);
 //        System.out.println("Interval start: " + finalFeeModel.getStart() + " Price: " + finalFeeModel.getPrice());

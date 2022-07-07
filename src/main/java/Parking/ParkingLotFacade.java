@@ -1,5 +1,6 @@
 package Parking;
 
+import Exceptions.InputNotProvidedException;
 import Exceptions.InvalidParkingTicketException;
 import Exceptions.InvalidPaymentTicketException;
 import Exceptions.ParkingLotIsFullException;
@@ -17,5 +18,5 @@ public interface ParkingLotFacade {
 
     int unparkVehicleAndGetAmount(Vehicle vehicle, PaymentTicket paymentTicket) throws InvalidPaymentTicketException;
 
-    PaymentTicket pay(ParkingTicket parkingTicket, LocalDateTime unParkingTime, Vehicle vehicle) throws InvalidParkingTicketException;
+    PaymentTicket pay(ParkingTicket parkingTicket, LocalDateTime unParkingTime, Vehicle vehicle) throws InvalidParkingTicketException, InputNotProvidedException;
 }

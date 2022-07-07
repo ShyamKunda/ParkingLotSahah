@@ -1,18 +1,18 @@
 package Users;
 
+import Exceptions.InputNotProvidedException;
 import Exceptions.InvalidParkingTicketException;
 import Exceptions.InvalidPaymentTicketException;
 import Exceptions.ParkingLotIsFullException;
 import Parking.ParkingLotFacade;
 import Payment.ParkingTicket;
-import Payment.PaymentMethod;
 import Payment.PaymentTicket;
 import Vehicles.Vehicle;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
-public class CarOwner {
+public class VehicleOwner {
     String name;
     Vehicle vehicle;
     ParkingTicket parkingTicket;
@@ -50,7 +50,7 @@ public class CarOwner {
         this.paymentTicket = paymentTicket;
     }
 
-    public CarOwner(String name, Vehicle vehicle) {
+    public VehicleOwner(String name, Vehicle vehicle) {
         this.name = name;
         this.vehicle = vehicle;
         this.parkingTicket = null;
@@ -98,7 +98,7 @@ public class CarOwner {
 
         try {
             this.paymentTicket = parkingLot.pay(this.parkingTicket, unParkTime, vehicle);
-        } catch (InvalidParkingTicketException e) {
+        } catch (InvalidParkingTicketException | InputNotProvidedException e) {
             e.printStackTrace();
         }
         return this.paymentTicket;
@@ -116,6 +116,17 @@ public class CarOwner {
     public PaymentTicket unparkVehicleAndGetAmount(ParkingLotFacade parkingLot, LocalDateTime unParkTime) {
         try {
             this.paymentTicket =this.pay(parkingLot, unParkTime, this.vehicle);
+            parkingLot.unparkVehicleAndGetAmount(this.vehicle, this.paymentTicket);
+        }
+        catch (InvalidPaymentTicketException e) {
+            e.printStackTrace();
+        }
+        return paymentTicket;
+    }
+
+    public PaymentTicket unparkVehicleAndGetAmount(ParkingLotFacade parkingLot) {
+        try {
+            this.paymentTicket =this.pay(parkingLot, LocalDateTime.now(), this.vehicle);
             parkingLot.unparkVehicleAndGetAmount(this.vehicle, this.paymentTicket);
         }
         catch (InvalidPaymentTicketException e) {

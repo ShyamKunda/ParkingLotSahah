@@ -92,26 +92,11 @@ public class ParkingLevelsCollectionFactory {
         typesMapper.put(VehicleType.MOTORCYCLE,
                 Arrays.asList(ParkingSpotType.MOTORCYCLE));
         typesMapper.put(VehicleType.CAR,
-                Arrays.asList(ParkingSpotType.COMPACT));
+                Arrays.asList(ParkingSpotType.CAR));
         typesMapper.put(VehicleType.TRUCK,
-                Collections.singletonList(ParkingSpotType.LARGE));
+                Collections.singletonList(ParkingSpotType.TRUCK));
         return typesMapper::get;
     }
-
-    private  Map<ParkingSpotType, Collection<ParkingSpot>> generateSpots(int parkingLevelID, int parkingSpotID) {
-        Map<ParkingSpotType, Collection<ParkingSpot>> allSpotsForLevel = new HashMap<>();
-        for (ParkingSpotType parkingSpotType : ParkingSpotType.values()) {
-            Collection<ParkingSpot> spotsForLevel = new ArrayList<>();
-            for (int i = 0; i < getNUM_OF_SPOTS_PER_SPOT_TYPE(); i++) {
-                spotsForLevel.add(new ParkingSpot(parkingSpotID,
-                        parkingLevelID, parkingSpotType));
-                parkingSpotID++;
-            }
-            allSpotsForLevel.put(parkingSpotType, spotsForLevel);
-        }
-        return allSpotsForLevel;
-    }
-
     private  Map<ParkingSpotType, Collection<ParkingSpot>> generateSpots(int parkingLevelID, int parkingSpotID, Map<ParkingSpotType, Integer> spotAllocations, int totalLevels) {
         Map<ParkingSpotType, Collection<ParkingSpot>> allSpotsForLevel = new HashMap<>();
         for (ParkingSpotType parkingSpotType : ParkingSpotType.values()) {

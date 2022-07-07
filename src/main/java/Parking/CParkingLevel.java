@@ -25,8 +25,8 @@ public class CParkingLevel implements ParkingLevel {
         this.vacantSpots = allSpotsForLevel;
         this.takenSpots = new HashMap<>();
         takenSpots.put(ParkingSpotType.MOTORCYCLE, new ArrayList<>());
-        takenSpots.put(ParkingSpotType.COMPACT, new ArrayList<>());
-        takenSpots.put(ParkingSpotType.LARGE, new ArrayList<>());
+        takenSpots.put(ParkingSpotType.CAR, new ArrayList<>());
+        takenSpots.put(ParkingSpotType.TRUCK, new ArrayList<>());
         this.totalNumOfVacantSpots =
                 allSpotsForLevel.values().stream().
                         mapToInt(Collection::size).sum();
@@ -74,9 +74,9 @@ public class CParkingLevel implements ParkingLevel {
     @Override
     public ParkingSpot parkVehicle
             (Vehicle vehicle, ParkingAssignmentPolicy parkingAssignmentPolicy) throws ParkingLotIsFullException {
-        ParkingSpot assignedParkingSpot =
-                parkingAssignmentPolicy.assignSpot(vacantSpots,
-                        possibleSpots.getPossibleParkingSpotTypes(vehicle.getVehicleType()));
+        Collection<ParkingSpotType> parkingSpotTypeCollection = possibleSpots.getPossibleParkingSpotTypes(vehicle.getVehicleType());
+
+        ParkingSpot assignedParkingSpot = parkingAssignmentPolicy.assignSpot(vacantSpots, parkingSpotTypeCollection);
         ParkingSpotType parkingSpotType =
                 assignedParkingSpot.getParkingSpotType();
         vacantSpots.get(parkingSpotType).remove(assignedParkingSpot);

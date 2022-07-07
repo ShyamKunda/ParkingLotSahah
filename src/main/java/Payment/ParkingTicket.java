@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public class ParkingTicket {
 
+    private String id;
 
     private int vehicleID;
     private ParkingSpot parkingSpot;
@@ -15,6 +16,8 @@ public class ParkingTicket {
 
 
     public ParkingTicket(int vehicleID, ParkingSpot parkingSpot, LocalDateTime parkingTime) {
+        this.id = Integer.toString(parkingSpot.getParkingSpotID()) +
+                Integer.toString(parkingSpot.getParkingLevelID()) + "-" + parkingSpot.getParkingSpotType();
         this.vehicleID = vehicleID;
         this.parkingSpot = parkingSpot;
         this.parkingTime = parkingTime;
@@ -32,12 +35,15 @@ public class ParkingTicket {
         return parkingTime;
     }
 
+
     @Override
     public String toString() {
-        return "Parking ticket:\n" +
-                "vehicleID=" + vehicleID + "\n" +
-                "parkingSpot=" + parkingSpot.getParkingSpotID() + " on level " + parkingSpot.getParkingLevelID()+ "\n" +
-                "parkingTime=" + parkingTime + "\n";
+        return "===============\nParkingTicket\n{" +
+                "\nid='" + id + '\'' +
+                ", \nvehicleID=" + vehicleID +
+                ", \nparkingSpot=" + parkingSpot +
+                ", \nparkingTime=" + parkingTime +
+                "\n}\n===============\n";
     }
 
     public void setParkingTime(LocalDateTime parkingTime) {

@@ -1,5 +1,6 @@
 package Parking;
 
+import Exceptions.InputNotProvidedException;
 import Exceptions.InvalidParkingTicketException;
 import Exceptions.InvalidPaymentTicketException;
 import Exceptions.ParkingLotIsFullException;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-public class ParkingLot implements ParkingLotFacade{
+public class ParkingLot implements ParkingLotFacade {
     private ParkingLevelsCollection fullLevels;
     private ParkingLevelsCollection nonFullLevels;
     private LevelAssignmentPolicy levelAssignmentPolicy;
@@ -53,6 +54,7 @@ public class ParkingLot implements ParkingLotFacade{
             throw new ParkingLotIsFullException("No vacant levels for parking");
         }
         ParkingLevel assignedParkingLevel = levelAssignmentPolicy.assignLevel(nonFullLevels, vehicle);
+
         ParkingSpot assignedParkingSpot =
                 assignedParkingLevel.parkVehicle(vehicle, parkingAssignmentPolicy);
 
@@ -65,7 +67,7 @@ public class ParkingLot implements ParkingLotFacade{
 
     public ParkingTicket parkVehicle(Vehicle vehicle, LocalDateTime localDateTime) throws ParkingLotIsFullException {
         if (nonFullLevels.size() == 0) {
-            throw new ParkingLotIsFullException("No vacant levels for parking");
+            throw new ParkingLotIsFullException("No vacant levels for parking for vehicle type: " + vehicle.getVehicleType());
         }
         ParkingLevel assignedParkingLevel = levelAssignmentPolicy.assignLevel(nonFullLevels, vehicle);
         ParkingSpot assignedParkingSpot =
@@ -107,7 +109,7 @@ public class ParkingLot implements ParkingLotFacade{
         return 0;
     }
 
-    public PaymentTicket pay(ParkingTicket parkingTicket, LocalDateTime unParkingTime, Vehicle vehicle) throws InvalidParkingTicketException {
+    public PaymentTicket pay(ParkingTicket parkingTicket, LocalDateTime unParkingTime, Vehicle vehicle) throws InvalidParkingTicketException, InputNotProvidedException{
         if (parkingTicket==null) {
             throw new InvalidParkingTicketException("an invalid parking " +
                     "ticket was passed");
